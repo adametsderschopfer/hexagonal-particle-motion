@@ -13,7 +13,8 @@ function bootstrap() {
 
     function dotsFactory() {
         if (dotsList.length < cfg.dotsCount && Math.random() > .8) {
-            dotsList = [...dotsList, new Dot({ctx, x: cx, y: cy, dirsList})]
+            dotsList = [...dotsList, new Dot({ctx, x: cx, y: cy, dirsList})];
+            cfg.hue = (cfg.hue + 1) % 360;
         }
     }
 
@@ -28,7 +29,7 @@ function bootstrap() {
     }
 
     loop(() => {
-        drawRect({ctx, color: cfg.bgFillColor, x: 0, y: 0, w: cw, h: ch});
+        drawRect({ctx, color: cfg.bgFillColor, x: 0, y: 0, w: cw, h: ch, shadowBlur: 0, shadowColor: 0, gco: 'normal'});
 
         dotsFactory();
         refreshDots();

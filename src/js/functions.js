@@ -14,7 +14,8 @@ export function resizeCanvas(c) {
     return {cw: c.width, ch: c.height, cx: c.width / 2, cy: c.height / 2};
 }
 
-export function drawRect({ctx, color, x, y, w, h, shadowColor, shadowBlur}) {
+export function drawRect({ctx, color, x, y, w, h, shadowColor, shadowBlur, gco}) {
+    ctx.globalCompositeOperation = gco;
     ctx.shadowColor = shadowColor || 'black';
     ctx.shadowBlur = shadowBlur || '1';
 
@@ -26,8 +27,9 @@ export function createDirs() {
     let dirsList = [];
 
     for (let i = 0; i !== 360; i += 360 / cfg.dirsCount) {
-        let x = Math.cos(i * Math.PI / 180);
-        let y = Math.sin(i * Math.PI / 180);
+        let angle = cfg.gridAngle + i;
+        let x = Math.cos(angle * Math.PI / 180);
+        let y = Math.sin(angle * Math.PI / 180);
 
         dirsList = [...dirsList, {x, y}]
     }

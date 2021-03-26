@@ -4,20 +4,23 @@ import {cfg} from "../config.js";
 class Dot {
     constructor({x, y, ctx, dirsList}) {
         this.pos = {x, y};
+        this.initialPos = {x, y}
         this.ctx = ctx;
-        this.dir = (Math.floor(Math.random() * 3)) * 2 ;
+        this.dir = cfg.dirsCount === 6 ? (Math.floor(Math.random() * 3)) * 2 : Math.random() * cfg.dirsCount | 0;
         this.dirsList = dirsList;
         this.step = 0;
     }
 
     redraw() {
-        let shadowBlur = 4;
-        let color = 'red';
-        let size = cfg.dotSize;
+        let xy = Math.abs(this.pos.x - this.initialPos.x) + Math.abs(this.pos.y - this.initialPos.y);
+        let makeHue = (cfg.hue + xy / cfg.gradientLength) % 360;
+        let color = `hsl(${ makeHue }, 100%, 50%)`;
+        let size = cfg.dotSizeDynamic ? cfg.dotSize - Math.sin(xy / 9) * 2 - Math.sin(xy / 2) : cfg.dotSize;
+        let shadowBlur = cfg.dotSize - Math.sin(xy / 8) * 2;
         let x = this.pos.x - size / 2;
         let y = this.pos.y - size / 2;
 
-        drawRect({ctx: this.ctx, color, x, y, w: size, h: size, shadowBlur});
+        drawRect({ctx: this.ctx, color, x, y, w: size, h: size, shadowBlur, gco: 'lighter'});
     }
 
     changeDir() {
